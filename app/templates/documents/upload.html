@@ -1,0 +1,58 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm animate-on-scroll">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">Upload Document</h3>
+                </div>
+                <div class="card-body">
+                    <form method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+                        <div class="mb-4">
+                            <label for="document" class="form-label">Select Document</label>
+                            <div class="input-group">
+                                <input type="file" class="form-control" id="document" name="document" 
+                                       accept=".pdf,.docx,.doc,.txt" required>
+                                <label class="input-group-text" for="document">
+                                    <i class="fas fa-file-upload"></i>
+                                </label>
+                            </div>
+                            <div class="form-text">
+                                Supported formats: PDF, DOCX, DOC, TXT (Max size: 16MB)
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="document_type" class="form-label">Document Type</label>
+                            <select class="form-select" id="document_type" name="document_type" required>
+                                <option value="">Select document type...</option>
+                                <option value="loan_agreement">Loan Agreement</option>
+                                <option value="bond_document">Bond Document</option>
+                                <option value="credit_facility">Credit Facility</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="description" class="form-label">Description</label>
+                            <textarea class="form-control" id="description" name="description" 
+                                      rows="3" placeholder="Enter document description..."></textarea>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-upload me-2"></i>Upload and Process
+                            </button>
+                            <a href="{{ url_for('documents.list_documents') }}" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left me-2"></i>Back to Documents
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

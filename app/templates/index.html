@@ -1,0 +1,113 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 animate-on-scroll">
+                <h1 class="display-4 fw-bold mb-4">Smart Covenant Tracking</h1>
+                <p class="lead mb-4">
+                    Revolutionize your financial covenant monitoring with our advanced tracking system.
+                    Stay compliant, receive instant alerts, and make informed decisions.
+                </p>
+                <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+                    {% if 'user' not in session %}
+                        <a href="{{ url_for('auth.login') }}" class="btn btn-light btn-lg px-4 me-md-2">
+                            <i class="fas fa-rocket me-2"></i>Get Started
+                        </a>
+                        <a href="#features" class="btn btn-outline-light btn-lg px-4">
+                            <i class="fas fa-info-circle me-2"></i>Learn More
+                        </a>
+                    {% else %}
+                        <a href="{{ url_for('main.dashboard') }}" class="btn btn-light btn-lg px-4">
+                            <i class="fas fa-tachometer-alt me-2"></i>Go to Dashboard
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-lg-6 d-none d-lg-block animate-on-scroll">
+                <img src="https://placehold.co/600x400" alt="Platform Preview" class="img-fluid rounded-3 shadow-lg">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Statistics Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="stats-container">
+            <div class="stat-card animate-on-scroll">
+                <i class="fas fa-chart-line mb-3 text-primary fa-2x"></i>
+                <div class="stat-number" data-value="1000">1,000+</div>
+                <div class="stat-label">Active Covenants Tracked</div>
+            </div>
+            <div class="stat-card animate-on-scroll">
+                <i class="fas fa-building mb-3 text-primary fa-2x"></i>
+                <div class="stat-number" data-value="500">500+</div>
+                <div class="stat-label">Companies Served</div>
+            </div>
+            <div class="stat-card animate-on-scroll">
+                <i class="fas fa-clock mb-3 text-primary fa-2x"></i>
+                <div class="stat-number" data-value="99">99%</div>
+                <div class="stat-label">Uptime</div>
+            </div>
+            <div class="stat-card animate-on-scroll">
+                <i class="fas fa-shield-alt mb-3 text-primary fa-2x"></i>
+                <div class="stat-number" data-value="100">100%</div>
+                <div class="stat-label">Data Security</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section id="features" class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-5">Powerful Features</h2>
+        <div class="features-grid">
+            <div class="feature-card animate-on-scroll">
+                <div class="feature-icon">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <h3>AI-Powered Analysis</h3>
+                <p>Advanced machine learning algorithms automatically extract and analyze covenant terms from documents.</p>
+            </div>
+            <div class="feature-card animate-on-scroll">
+                <div class="feature-icon">
+                    <i class="fas fa-bell"></i>
+                </div>
+                <h3>Real-time Alerts</h3>
+                <p>Receive instant notifications when covenants approach critical thresholds or require attention.</p>
+            </div>
+            <div class="feature-card animate-on-scroll">
+                <div class="feature-icon">
+                    <i class="fas fa-chart-bar"></i>
+                </div>
+                <h3>Advanced Analytics</h3>
+                <p>Comprehensive dashboards and reports provide deep insights into covenant performance.</p>
+            </div>
+            <div class="feature-card animate-on-scroll">
+                <div class="feature-icon">
+                    <i class="fas fa-lock"></i>
+                </div>
+                <h3>Secure Platform</h3>
+                <p>Enterprise-grade security ensures your financial data remains protected and confidential.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action -->
+<section class="py-5 bg-primary text-white">
+    <div class="container text-center">
+        <h2 class="mb-4">Ready to Transform Your Covenant Management?</h2>
+        <p class="lead mb-4">Join hundreds of companies already benefiting from our platform.</p>
+        {% if 'user' not in session %}
+            <a href="{{ url_for('auth.login') }}" class="btn btn-light btn-lg">
+                <i class="fas fa-paper-plane me-2"></i>Get Started Now
+            </a>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

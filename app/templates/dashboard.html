@@ -1,0 +1,165 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Welcome Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card shadow-sm border-0 animate-on-scroll">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h2 class="mb-1">Welcome, {{ session['user']['username'] }}!</h2>
+                            <p class="text-muted mb-0">Here's your covenant tracking overview</p>
+                        </div>
+                        <div class="btn-group">
+                            <a href="{{ url_for('documents.upload_document') }}" class="btn btn-primary">
+                                <i class="fas fa-upload me-2"></i>Upload Document
+                            </a>
+                            <a href="{{ url_for('documents.list_documents') }}" class="btn btn-outline-primary">
+                                <i class="fas fa-file-alt me-2"></i>View Documents
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 animate-on-scroll">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <div class="feature-icon bg-primary bg-gradient">
+                                <i class="fas fa-file-alt"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h6 class="text-muted mb-1">Total Documents</h6>
+                            <h3 class="mb-0">{{ documents|length if documents else 0 }}</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 animate-on-scroll">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <div class="feature-icon bg-success bg-gradient">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h6 class="text-muted mb-1">Compliant</h6>
+                            <h3 class="mb-0">{{ compliant_count if compliant_count else 0 }}</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 animate-on-scroll">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <div class="feature-icon bg-warning bg-gradient">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h6 class="text-muted mb-1">At Risk</h6>
+                            <h3 class="mb-0">{{ at_risk_count if at_risk_count else 0 }}</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 animate-on-scroll">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <div class="feature-icon bg-danger bg-gradient">
+                                <i class="fas fa-times-circle"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h6 class="text-muted mb-1">Breached</h6>
+                            <h3 class="mb-0">{{ breached_count if breached_count else 0 }}</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow-sm border-0 animate-on-scroll">
+                <div class="card-header bg-transparent">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Recent Activity</h5>
+                        <a href="{{ url_for('documents.list_documents') }}" class="btn btn-sm btn-outline-primary">
+                            View All Documents
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    {% if recent_documents %}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Document</th>
+                                        <th>Status</th>
+                                        <th>Upload Date</th>
+                                        <th>Covenants</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for doc in recent_documents %}
+                                        <tr>
+                                            <td>{{ doc.original_filename }}</td>
+                                            <td>
+                                                <span class="badge {% if doc.status == 'completed' %}bg-success
+                                                               {% elif doc.status == 'pending' %}bg-warning
+                                                               {% else %}bg-danger{% endif %}">
+                                                    {{ doc.status|title }}
+                                                </span>
+                                            </td>
+                                            <td>{{ doc.upload_date.strftime('%Y-%m-%d %H:%M') }}</td>
+                                            <td>{{ doc.covenants|length }}</td>
+                                            <td>
+                                                <a href="{{ url_for('documents.view_document', document_id=doc.id) }}" 
+                                                   class="btn btn-sm btn-outline-primary">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="text-center py-5">
+                            <i class="fas fa-file-upload fa-3x text-muted mb-3"></i>
+                            <h3>No Recent Activity</h3>
+                            <p class="text-muted">Upload your first document to start tracking covenants.</p>
+                            <a href="{{ url_for('documents.upload_document') }}" class="btn btn-primary mt-3">
+                                <i class="fas fa-upload me-2"></i>Upload Document
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

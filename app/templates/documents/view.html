@@ -1,0 +1,94 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row">
+        <div class="col-12 mb-4">
+            <div class="card shadow-sm animate-on-scroll">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h2 class="mb-1">{{ document.original_filename }}</h2>
+                            <p class="text-muted mb-0">
+                                Uploaded on {{ document.upload_date.strftime('%Y-%m-%d %H:%M') }}
+                            </p>
+                        </div>
+                        <a href="{{ url_for('documents.list_documents') }}" class="btn btn-outline-primary">
+                            <i class="fas fa-arrow-left me-2"></i>Back to Documents
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if covenants %}
+            {% for covenant in covenants %}
+                <div class="col-12 mb-4">
+                    <div class="card shadow-sm animate-on-scroll">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">Covenant #{{ loop.index }}</h5>
+                            <span class="badge {% if covenant.compliance_status == 'compliant' %}bg-success
+                                           {% elif covenant.compliance_status == 'at_risk' %}bg-warning
+                                           {% elif covenant.compliance_status == 'breached' %}bg-danger
+                                           {% else %}bg-secondary{% endif %}">
+                                {{ covenant.compliance_status|title }}
+                            </span>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <h6>Extracted Text:</h6>
+                                <p class="mb-3">{{ covenant.text }}</p>
+                            </div>
+
+                            <form method="POST" 
+                                  action="{{ url_for('documents.update_covenant', 
+                                  document_id=document.id, covenant_id=covenant.id) }}">
+                                <div class="mb-3">
+                                    <label class="form-label">Status</label>
+                                    <select class="form-select" name="status">
+                                        <option value="compliant" 
+                                                {% if covenant.compliance_status == 'compliant' %}selected{% endif %}>
+                                            Compliant
+                                        </option>
+                                        <option value="at_risk" 
+                                                {% if covenant.compliance_status == 'at_risk' %}selected{% endif %}>
+                                            At Risk
+                                        </option>
+                                        <option value="breached" 
+                                                {% if covenant.compliance_status == 'breached' %}selected{% endif %}>
+                                            Breached
+                                        </option>
+                                        <option value="pending" 
+                                                {% if covenant.compliance_status == 'pending' %}selected{% endif %}>
+                                            Pending Review
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Notes</label>
+                                    <textarea class="form-control" name="notes" rows="3">{{ covenant.user_notes }}</textarea>
+                                </div>
+
+                                <div class="text-end">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-save me-2"></i>Update Covenant
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-12">
+                <div class="text-center py-5">
+                    <i class="fas fa-file-alt fa-3x text-muted mb-3"></i>
+                    <h3>No Covenants Found</h3>
+                    <p class="text-muted">No covenants have been extracted from this document yet.</p>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
